@@ -1,0 +1,76 @@
+esphome:
+  name: electric_meter
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: "ssid"
+  password: "pass"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Electric Meter Fallback Hotspot"
+    password: "OxsiMNOAfHJl"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+time:
+  - platform: sntp
+    id: my_time
+
+
+uart:
+  rx_pin: 12
+  tx_pin: 14
+  baud_rate: 9600
+
+binary_sensor:
+  - platform: status
+    name: "Electric Meter Status"
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 2s
+  - platform: pzemac
+    current:
+      name: "Current"
+      icon: "mdi:alpha-a-circle"
+      unit_of_measurement: A
+    voltage:
+      name: "Voltage"
+      unit_of_measurement: V
+      icon: "mdi:alpha-v-circle"
+    energy:
+      name: "Energy"
+    power:
+      name: "Power"
+      id: w
+      unit_of_measurement: W 
+      icon: "mdi:alpha-w-circle"
+    frequency:
+      name: "Frequency"
+      unit_of_measurement: Hz
+      icon: "mdi:alpha-f-circle"
+    power_factor:
+      name: "Power Factor"
+      unit_of_measurement: PF
+      icon: "mdi:alpha-p-circle"
+    update_interval: 1s
+  - platform: total_daily_energy
+    name: "PZEM Energy kwh"
+    power_id: w 
+    filters:
+        # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kWh
+    icon: mdi:counter
+    accuracy_decimals: 1
