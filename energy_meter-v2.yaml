@@ -1,5 +1,5 @@
 esphome:
-  name: electric_meter_slow
+  name: electric_meter
   platform: ESP8266
   board: d1_mini
 
