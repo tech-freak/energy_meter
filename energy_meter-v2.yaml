@@ -1,5 +1,5 @@
 esphome:
-  name: electric_meter
+  name: energy_meter
   platform: ESP8266
   board: d1_mini
 
