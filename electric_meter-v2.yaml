@@ -1,0 +1,150 @@
+esphome:
+  name: electric_meter_slow
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: "ssid"
+  password: "pass"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Electric Meter Fallback Hotspot"
+    password: "OxsiMNOAfHJl"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+time:
+  - platform: sntp
+    id: my_time
+
+uart:
+  rx_pin: 12
+  tx_pin: 14
+  baud_rate: 9600
+
+binary_sensor:
+  - platform: status
+    name: "Electric Meter Status"
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 2s
+
+#FAST SENSORS FOR ENERGY CALCULATION & LOCAL DISPLAY
+  - platform: pzemac
+    current:
+      name: "PZEM-016 Current"
+      id: aac
+      internal: true
+    voltage:
+      name: "PZEM-016 Voltage"
+      id: vac
+      internal: true
+    energy:
+      name: "PZEM-016 Energy"
+      id: eac
+      internal: true
+    power:
+      name: "PZEM-016 Power"
+      id: w
+      internal: true
+    frequency:
+      name: "PZEM-016 Frequency"
+      id: f
+      internal: true
+    power_factor:
+      name: "PZEM-016 Power Factor"
+      id: pf
+      internal: true
+    update_interval: 2s
+
+  - platform: total_daily_energy
+    name: "PZEM Energy kwh"
+    power_id: w 
+    filters:
+        # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kWh
+    icon: mdi:counter
+    accuracy_decimals: 1
+
+#SLOW SENSORS FOR HOME ASSISTANT
+  - platform: template #########################
+    name: "Current"
+    lambda: |-
+      if (id(aac).state) {
+        return (id(aac).state);
+      } else {
+        return 0;
+      }
+    unit_of_measurement: A
+    icon: "mdi:alpha-a-circle"
+    update_interval: 10s
+
+  - platform: template #########################
+    name: "Voltage"
+    lambda: |-
+      if (id(vac).state) {
+        return (id(vac).state);
+      } else {
+        return 0;
+      }
+    unit_of_measurement: V
+    icon: "mdi:alpha-v-circle"
+    update_interval: 10s
+
+  - platform: template #########################
+    name: "Energy"
+    lambda: |-
+      if (id(eac).state) {
+        return (id(eac).state);
+      } else {
+        return 0;
+      }
+    update_interval: 10s
+
+  - platform: template #########################
+    name: "power"
+    lambda: |-
+      if (id(w).state) {
+        return (id(w).state);
+      } else {
+        return 0;
+      }
+    unit_of_measurement: W 
+    icon: "mdi:alpha-w-circle"
+    update_interval: 10s
+
+  - platform: template #########################
+    name: "Frequency"
+    lambda: |-
+      if (id(f).state) {
+        return (id(f).state);
+      } else {
+        return 0;
+      }
+    unit_of_measurement: Hz
+    icon: "mdi:alpha-f-circle"
+    update_interval: 10s
+
+  - platform: template #########################
+    name: "Power Factor"
+    lambda: |-
+      if (id(pf).state) {
+        return (id(pf).state);
+      } else {
+        return 0;
+      }
+    unit_of_measurement: PF
+    icon: "mdi:alpha-p-circle"
+    update_interval: 10s
