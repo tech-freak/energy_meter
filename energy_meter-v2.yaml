@@ -111,6 +111,8 @@ sensor:
       } else {
         return 0;
       }
+    unit_of_measurement: Wh
+    icon: "mdi:flash-circle"
     update_interval: 10s
 
   - platform: template #########################
