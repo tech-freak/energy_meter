@@ -51,6 +51,8 @@ sensor:
       icon: "mdi:alpha-v-circle"
     energy:
       name: "Energy"
+    unit_of_measurement: Wh
+    icon: "mdi:flash-circle"
     power:
       name: "Power"
       id: w
