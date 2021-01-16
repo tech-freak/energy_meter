@@ -1,17 +1,19 @@
 #energy meter
-utility_meter:
-  daily_energy:
+
+    utility_meter:
+    daily_energy:
     source: sensor.pzem_energy_kwh
     cycle: daily
-  weekly_energy:
+    weekly_energy:
     source: sensor.pzem_energy_kwh
     cycle: weekly
-  monthly_energy:
+    monthly_energy:
     source: sensor.pzem_energy_kwh
     cycle: monthly
 
 #Yesterday
-  - platform: template
+
+    - platform: template
     sensors:
       yesterday_energy:
         icon: 'mdi:counter'
@@ -24,6 +26,7 @@ utility_meter:
         value_template: "{{ state_attr('sensor.daily_energy', 'last_period') }}
 
 #Pricing
+
       energy_cost_daily:
         friendly_name: "Cost Daily"
         unit_of_measurement: '₹'
