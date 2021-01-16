@@ -17,12 +17,6 @@
     sensors:
       yesterday_energy:
         icon: 'mdi:counter'
-        value_template: >-
-          {% if now().hour == 23 and now().minute == 59 -%}
-          {{ states('sensor.daily_energy') }}
-          {%- endif %}
-        or
-        
         value_template: "{{ state_attr('sensor.daily_energy', 'last_period') }}
 
 #Pricing
